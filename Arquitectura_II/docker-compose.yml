@@ -4,7 +4,7 @@ services:
     container_name: srv1
     working_dir: /app
     volumes:
-      - ./server1:/app:ro
+      - ./Server_1:/app:ro
     command: ["python", "-m", "http.server", "8000"]
     networks:
       - rrnet
@@ -14,7 +14,7 @@ services:
     container_name: srv2
     working_dir: /app
     volumes:
-      - ./server2:/app:ro
+      - ./Server_2:/app:ro
     command: ["python", "-m", "http.server", "8000"]
     networks:
       - rrnet
@@ -34,4 +34,5 @@ services:
 
 networks:
   rrnet:
+
     driver: bridge
