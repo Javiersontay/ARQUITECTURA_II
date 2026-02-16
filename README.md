@@ -15,9 +15,11 @@ https://d2a43967id9enm.cloudfront.net
 <img width="1344" height="524" alt="image" src="https://github.com/user-attachments/assets/0ec2da5e-8527-4c2d-a933-d4ba81884c53" />
 
 ##Captura de pantalla de los secretos en GitHub.
+<img width="1352" height="584" alt="image" src="https://github.com/user-attachments/assets/f38890f8-2be6-461b-9ad1-6acad1022635" />
 
-
-
+##Captura de la aplicación mostrando la aplicación.
+<img width="1306" height="718" alt="image" src="https://github.com/user-attachments/assets/c2af1d36-d607-4367-9b81-5176cedaa7f6" />
+<img width="1308" height="717" alt="image" src="https://github.com/user-attachments/assets/a904f6c2-386b-43b8-aecf-b6c9dfc77b88" />
 
 ## Estructura del proyecto
 La aplicación está en:
@@ -28,3 +30,4 @@ La aplicación está en:
 cd assignment-02/my-website
 npm install
 npm run dev
+npm run build
