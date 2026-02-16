@@ -11,6 +11,12 @@ https://d2a43967id9enm.cloudfront.net
 ##Captura de pantalla de la pestaña "Config Syncs" de Doppler mostrando la integración con su repositorio.
 <img width="1365" height="539" alt="image" src="https://github.com/user-attachments/assets/6ecb2ece-a426-46a2-92de-15997a332425" />
 
+##Captura de pantalla de sus variables de Doppler (ocultando valores).
+<img width="1344" height="524" alt="image" src="https://github.com/user-attachments/assets/0ec2da5e-8527-4c2d-a933-d4ba81884c53" />
+
+##Captura de pantalla de los secretos en GitHub.
+
+
 
 
 ## Estructura del proyecto
