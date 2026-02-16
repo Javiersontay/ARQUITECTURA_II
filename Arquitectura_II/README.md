@@ -9,4 +9,3 @@ http://localhost:8080
 ## Comando para ejecutar
 ```bash
 docker compose up
-
