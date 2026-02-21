@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+set -e
+
+cd assignment-03/my-web-application
+npm run lint
