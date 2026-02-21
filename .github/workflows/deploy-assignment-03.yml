@@ -1,0 +1,56 @@
+name: Build Docker image and Deploy to Elastic Beanstalk (Assignment 03)
+
+on:
+  push:
+    branches: ["assignment-03"]
+    paths:
+      - "assignment-03/my-web-application/**"
+      - ".github/workflows/deploy-assignment-03.yml"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Doppler CLI
+        uses: dopplerhq/cli-action@v2
+
+      - name: Download secrets from Doppler (.env)
+        run: doppler secrets download --no-file --format env > .env
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+
+      - name: Export env vars from .env
+        run: |
+          set -a
+          source .env
+          set +a
+
+      # ✅ Build de la imagen Docker (para cumplir el enunciado)
+      - name: Docker build (verification)
+        run: |
+          cd assignment-03/my-web-application
+          docker build -t assignment03-app:${{ github.sha }} .
+
+      # ✅ Empaquetar para Elastic Beanstalk
+      - name: Create deploy zip
+        run: |
+          cd assignment-03/my-web-application
+          rm -rf node_modules dist || true
+          zip -r ../../deploy.zip . -x ".git/*" "node_modules/*"
+          cd ../..
+
+      # ✅ Deploy a Elastic Beanstalk
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          region: us-east-1
+          application_name: assignment-03-app
+          environment_name: assignment-03-app-env
+          version_label: gh-${{ github.run_number }}
+          deployment_package: deploy.zip
