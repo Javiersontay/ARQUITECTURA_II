@@ -22,13 +22,14 @@ jobs:
         run: doppler secrets download --no-file --format env > .env
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+          
 
-      - name: Export env vars from .env
+      - name:  Export AWS vars to GitHub environment
         run: |
-          set -a
-          source .env
-          set +a
-
+          echo "AWS_ACCESS_KEY_ID=$(grep AWS_ACCESS_KEY_ID .env | cut -d '=' -f2)" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=$(grep AWS_SECRET_ACCESS_KEY .env | cut -d '=' -f2)" >> $GITHUB_ENV
+          
+          
       # ✅ Build de la imagen Docker (para cumplir el enunciado)
       - name: Docker build (verification)
         run: |
