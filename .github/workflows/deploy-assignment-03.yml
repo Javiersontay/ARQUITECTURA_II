@@ -12,8 +12,6 @@ env:
   AWS_REGION: us-east-1
   EB_APPLICATION_NAME: assignment-03-app
   EB_ENVIRONMENT_NAME: assignment-03-app-env
-
-  # Ruta donde está tu app Vite + Dockerfile
   APP_DIR: assignment-03/my-web-application
 
 jobs:
@@ -31,35 +29,27 @@ jobs:
           echo "App dir:"
           ls -la "${APP_DIR}"
 
-      # ✅ Verificación: que el Dockerfile construya bien
       - name: Docker build (verification)
         run: |
           docker build -t assignment03-app:ci "${APP_DIR}"
 
-      # ✅ Crear Dockerrun.aws.json (Single Container) para EB
       - name: Create Dockerrun.aws.json
         run: |
           cat > Dockerrun.aws.json << 'EOF'
           {
             "AWSEBDockerrunVersion": "1",
             "Ports": [
-              {
-                "ContainerPort": 80
-              }
+              { "ContainerPort": 80 }
             ]
           }
           EOF
           cat Dockerrun.aws.json
-
-      # ✅ Empaquetar deploy.zip
+          
       - name: Create deploy zip
         run: |
           rm -f deploy.zip
-
-          # Copiamos el Dockerfile a la raíz del zip
           cp "${APP_DIR}/Dockerfile" Dockerfile
 
-          # Metemos el contenido de APP_DIR dentro de app/
           mkdir -p app
           rsync -av --delete \
             --exclude node_modules \
@@ -69,22 +59,21 @@ jobs:
           zip -r deploy.zip Dockerrun.aws.json Dockerfile app
           ls -la deploy.zip
 
-      # ✅ Configurar credenciales AWS desde GitHub Secrets (NO rompe tarea 2)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_A03 }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_A03 }}
           aws-region: ${{ env.AWS_REGION }}
-
-      # ✅ DEBUG (esto valida si AWS keys están bien)
+          
       - name: Debug AWS identity
         run: aws sts get-caller-identity
 
-      # ✅ Deploy a Elastic Beanstalk
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID_A03 }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY_A03 }}
           region: ${{ env.AWS_REGION }}
           application_name: ${{ env.EB_APPLICATION_NAME }}
           environment_name: ${{ env.EB_ENVIRONMENT_NAME }}
