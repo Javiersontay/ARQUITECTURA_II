@@ -1,11 +1,20 @@
-name: Build Docker image and Deploy to Elastic Beanstalk (Assignment 03)
+name: CI - Build Docker + Deploy to Elastic Beanstalk (Assignment 03)
 
 on:
   push:
     branches: ["assignment-03"]
-    paths:
-      - "assignment-03/my-web-application/**"
-      - ".github/workflows/deploy-assignment-03.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  EB_APPLICATION_NAME: assignment-03-app
+  EB_ENVIRONMENT_NAME: assignment-03-app-env
+
+  # Ruta donde está tu app Vite + Dockerfile
+  APP_DIR: assignment-03/my-web-application
 
 jobs:
   build-and-deploy:
@@ -15,43 +24,70 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Doppler CLI
-        uses: dopplerhq/cli-action@v2
-
-      - name: Download secrets from Doppler (.env)
-        run: doppler secrets download --no-file --format env > .env
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
-          
-
-      - name:  Export AWS vars to GitHub environment
+      - name: Show structure (debug)
         run: |
-          echo "AWS_ACCESS_KEY_ID=$(grep AWS_ACCESS_KEY_ID .env | cut -d '=' -f2)" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=$(grep AWS_SECRET_ACCESS_KEY .env | cut -d '=' -f2)" >> $GITHUB_ENV
-          
-          
-      # ✅ Build de la imagen Docker (para cumplir el enunciado)
+          echo "Repo root:"
+          ls -la
+          echo "App dir:"
+          ls -la "${APP_DIR}"
+
+      # ✅ Verificación: que el Dockerfile construya bien
       - name: Docker build (verification)
         run: |
-          cd assignment-03/my-web-application
-          docker build -t assignment03-app:${{ github.sha }} .
+          docker build -t assignment03-app:ci "${APP_DIR}"
 
-      # ✅ Empaquetar para Elastic Beanstalk
+      # ✅ Crear Dockerrun.aws.json (Single Container) para EB
+      - name: Create Dockerrun.aws.json
+        run: |
+          cat > Dockerrun.aws.json << 'EOF'
+          {
+            "AWSEBDockerrunVersion": "1",
+            "Ports": [
+              {
+                "ContainerPort": 80
+              }
+            ]
+          }
+          EOF
+          cat Dockerrun.aws.json
+
+      # ✅ Empaquetar deploy.zip
       - name: Create deploy zip
         run: |
-          cd assignment-03/my-web-application
-          rm -rf node_modules dist || true
-          zip -r ../../deploy.zip . -x ".git/*" "node_modules/*"
-          cd ../..
+          rm -f deploy.zip
+
+          # Copiamos el Dockerfile a la raíz del zip
+          cp "${APP_DIR}/Dockerfile" Dockerfile
+
+          # Metemos el contenido de APP_DIR dentro de app/
+          mkdir -p app
+          rsync -av --delete \
+            --exclude node_modules \
+            --exclude dist \
+            "${APP_DIR}/" app/
+
+          zip -r deploy.zip Dockerrun.aws.json Dockerfile app
+          ls -la deploy.zip
+
+      # ✅ Configurar credenciales AWS desde GitHub Secrets (NO rompe tarea 2)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_A03 }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_A03 }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # ✅ DEBUG (esto valida si AWS keys están bien)
+      - name: Debug AWS identity
+        run: aws sts get-caller-identity
 
       # ✅ Deploy a Elastic Beanstalk
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
-          aws_access_key: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          region: us-east-1
-          application_name: assignment-03-app
-          environment_name: assignment-03-app-env
-          version_label: gh-${{ github.run_number }}
+          region: ${{ env.AWS_REGION }}
+          application_name: ${{ env.EB_APPLICATION_NAME }}
+          environment_name: ${{ env.EB_ENVIRONMENT_NAME }}
+          version_label: "gh-${{ github.run_number }}-${{ github.sha }}"
           deployment_package: deploy.zip
+          wait_for_deployment: true
