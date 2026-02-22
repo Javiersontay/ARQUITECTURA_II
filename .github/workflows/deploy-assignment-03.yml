@@ -22,6 +22,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Asegura herramientas necesarias
+      - name: Install tools (zip, rsync)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip rsync
+
       - name: Show structure (debug)
         run: |
           echo "Repo root:"
@@ -29,10 +35,12 @@ jobs:
           echo "App dir:"
           ls -la "${APP_DIR}"
 
+      # Verificación: que el Dockerfile construya bien (solo para validar)
       - name: Docker build (verification)
         run: |
           docker build -t assignment03-app:ci "${APP_DIR}"
 
+      # Dockerrun para Single Container (EB lo detecta en la raíz del zip)
       - name: Create Dockerrun.aws.json
         run: |
           cat > Dockerrun.aws.json << 'EOF'
@@ -44,19 +52,24 @@ jobs:
           }
           EOF
           cat Dockerrun.aws.json
-          
-      - name: Create deploy zip
+
+      # ✅ CLAVE: el build context debe estar en la RAÍZ del zip
+      # Copiamos TODO el proyecto (sin node_modules/dist) a la raíz y zipeamos
+      - name: Create deploy zip (root build context)
         run: |
           rm -f deploy.zip
-          cp "${APP_DIR}/Dockerfile" Dockerfile
 
-          mkdir -p app
+          # Copiar el contenido del proyecto Vite a la raíz del workspace
           rsync -av --delete \
             --exclude node_modules \
             --exclude dist \
-            "${APP_DIR}/" app/
+            "${APP_DIR}/" ./
 
-          zip -r deploy.zip Dockerrun.aws.json Dockerfile app
+          # Por si el proyecto tiene package-lock.json, se incluye (está en raíz ahora)
+          echo "Root after rsync:"
+          ls -la
+
+          zip -r deploy.zip .
           ls -la deploy.zip
 
       - name: Configure AWS credentials
@@ -65,7 +78,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_A03 }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_A03 }}
           aws-region: ${{ env.AWS_REGION }}
-          
+
       - name: Debug AWS identity
         run: aws sts get-caller-identity
 
