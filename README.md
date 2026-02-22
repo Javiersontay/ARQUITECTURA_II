@@ -1,9 +1,3 @@
-## Enlace de su repositorio de GitHub
-https://github.com/Javiersontay/ARQUITECTURA_II
-
-## Enlace de de la rama assignment-03` de GitHub
-https://github.com/Javiersontay/ARQUITECTURA_II/tree/assignment-03
-
 ## Captura de la aplicación
 <img width="1306" height="673" alt="image" src="https://github.com/user-attachments/assets/1b2198b7-9a7a-46a9-9f68-dfde21c55382" />
 <img width="1305" height="618" alt="image" src="https://github.com/user-attachments/assets/67fd3698-ded6-4e44-a79b-fbf20dfff1cc" />
@@ -19,6 +13,7 @@ Husky fue configurado para ejecutar validaciones automáticas antes de realizar 
 
 ## URL de AWS Elastic Beanstalk
 http://assignment-03-app-env.eba-a32pcqf7.us-east-1.elasticbeanstalk.com
+
 #COMENTARIO: La aplicación está desplegada en Elastic Beanstalk bajo configuración Single Instance, utilizando únicamente el puerto 80 (HTTP). Usando HTTPS el link no funionara y no mostrara la pagina, aclaro este punto porque durante las pruebas realizadas, se observó que algunos navegadores, tanto en dispositivos móviles como en computadoras, redirigen automáticamente a HTTPS por motivos de seguridad. En esos casos, al eliminar la “s” y acceder mediante http://, la aplicación se visualiza correctamente.
 
 ## Capturas de pantalla de la configuración de AWS Beanstalk.
