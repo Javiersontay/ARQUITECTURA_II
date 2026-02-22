@@ -34,12 +34,12 @@ jobs:
           echo "App dir:"
           ls -la "${APP_DIR}"
 
-      # ✅ Verifica que el Dockerfile construye
+      
       - name: Docker build (verification)
         run: |
           docker build -t assignment03-app:ci "${APP_DIR}"
 
-      # ✅ Dockerrun para Single Container (en raíz del zip)
+      
       - name: Create Dockerrun.aws.json
         run: |
           cat > Dockerrun.aws.json << 'EOF'
@@ -52,8 +52,7 @@ jobs:
           EOF
           cat Dockerrun.aws.json
 
-      # ✅ Crear deploy.zip SIN tocar el repo root:
-      #    Copiamos la app a bundle/ y zipeamos esa carpeta.
+
       - name: Create deploy zip (safe bundle)
         run: |
           rm -f deploy.zip
