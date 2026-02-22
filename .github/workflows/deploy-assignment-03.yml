@@ -22,7 +22,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Asegura herramientas necesarias
       - name: Install tools (zip, rsync)
         run: |
           sudo apt-get update
@@ -35,12 +34,12 @@ jobs:
           echo "App dir:"
           ls -la "${APP_DIR}"
 
-      # Verificación: que el Dockerfile construya bien (solo para validar)
+      # ✅ Verifica que el Dockerfile construye
       - name: Docker build (verification)
         run: |
           docker build -t assignment03-app:ci "${APP_DIR}"
 
-      # Dockerrun para Single Container (EB lo detecta en la raíz del zip)
+      # ✅ Dockerrun para Single Container (en raíz del zip)
       - name: Create Dockerrun.aws.json
         run: |
           cat > Dockerrun.aws.json << 'EOF'
@@ -53,23 +52,31 @@ jobs:
           EOF
           cat Dockerrun.aws.json
 
-      # ✅ CLAVE: el build context debe estar en la RAÍZ del zip
-      # Copiamos TODO el proyecto (sin node_modules/dist) a la raíz y zipeamos
-      - name: Create deploy zip (root build context)
+      # ✅ Crear deploy.zip SIN tocar el repo root:
+      #    Copiamos la app a bundle/ y zipeamos esa carpeta.
+      - name: Create deploy zip (safe bundle)
         run: |
           rm -f deploy.zip
+          rm -rf bundle
+          mkdir -p bundle
 
-          # Copiar el contenido del proyecto Vite a la raíz del workspace
-          rsync -av --delete \
+          # Copiar el proyecto Vite a bundle/ (sin node_modules/dist)
+          rsync -av \
             --exclude node_modules \
             --exclude dist \
-            "${APP_DIR}/" ./
+            "${APP_DIR}/" bundle/
 
-          # Por si el proyecto tiene package-lock.json, se incluye (está en raíz ahora)
-          echo "Root after rsync:"
-          ls -la
+          # Copiar Dockerrun a bundle/ (raíz del zip)
+          cp Dockerrun.aws.json bundle/Dockerrun.aws.json
 
-          zip -r deploy.zip .
+          echo "Bundle contents:"
+          ls -la bundle
+          echo "Bundle tree:"
+          find bundle -maxdepth 3 -type f | sed -n '1,120p'
+
+          # Crear zip con el CONTENIDO de bundle en raíz del zip
+          (cd bundle && zip -r ../deploy.zip .)
+
           ls -la deploy.zip
 
       - name: Configure AWS credentials
