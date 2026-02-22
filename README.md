@@ -19,7 +19,7 @@ Husky fue configurado para ejecutar validaciones automáticas antes de realizar 
 
 ## URL de AWS Elastic Beanstalk
 http://assignment-03-app-env.eba-a32pcqf7.us-east-1.elasticbeanstalk.com
-# COMENTARIO: La aplicación está desplegada en Elastic Beanstalk bajo configuración Single Instance, utilizando únicamente el puerto 80 (HTTP). Usando HTTPS el link no funionara y no mostrara la pagina, aclaro este punto porque durante las pruebas realizadas, se observó que algunos navegadores, tanto en dispositivos móviles como en computadoras, redirigen automáticamente a HTTPS por motivos de seguridad. En esos casos, al eliminar la “s” y acceder mediante http://, la aplicación se visualiza correctamente.
+#COMENTARIO: La aplicación está desplegada en Elastic Beanstalk bajo configuración Single Instance, utilizando únicamente el puerto 80 (HTTP). Usando HTTPS el link no funionara y no mostrara la pagina, aclaro este punto porque durante las pruebas realizadas, se observó que algunos navegadores, tanto en dispositivos móviles como en computadoras, redirigen automáticamente a HTTPS por motivos de seguridad. En esos casos, al eliminar la “s” y acceder mediante http://, la aplicación se visualiza correctamente.
 
 ## Capturas de pantalla de la configuración de AWS Beanstalk.
 <img width="1365" height="542" alt="image" src="https://github.com/user-attachments/assets/ac9b4f9b-92a5-4374-85c4-3f3ac2594d60" />
