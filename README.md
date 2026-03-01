@@ -1,16 +1,10 @@
-# React + Vite
+##Captura de la aplicación mostrando la aplicación.
+<img width="1364" height="721" alt="image" src="https://github.com/user-attachments/assets/8ed56a49-0d41-4af2-ac99-30afe162ad7d" />
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+##URL de la imagen del Docker Hub.
+https://hub.docker.com/r/javier04/assignment-04 
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+##Captura de pantalla con las imágenes y tags de su aplicación en Docker Hub.
+<img width="1351" height="641" alt="image" src="https://github.com/user-attachments/assets/04ffee3e-ba2f-42b7-ba7b-57487d1972d0" />
+<img width="1353" height="640" alt="image" src="https://github.com/user-attachments/assets/db402e25-d0b9-4551-a9f7-f8402e2a0aad" />
+<img width="1352" height="642" alt="image" src="https://github.com/user-attachments/assets/d27f3a5d-d66b-4e2c-908a-bd39bcad2322" />
