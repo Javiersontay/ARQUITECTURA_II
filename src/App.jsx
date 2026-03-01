@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="container">
+      <header className="header">
+        <h1>Proyecto Assignment 04</h1>
+        <p>Aplicación web dockerizada con CI/CD usando GitHub Actions</p>
+      </header>
+
+      <section className="cards">
+        <div className="card">
+          <h2>Objetivo</h2>
+          <p>
+            Construir una aplicación web estática, dockerizarla y automatizar
+            su despliegue en Docker Hub utilizando un pipeline de integración continua.
+          </p>
+        </div>
+
+        <div className="card">
+          <h2>Tecnologías</h2>
+          <ul>
+            <li>React + Vite</li>
+            <li>Docker</li>
+            <li>GitHub Actions</li>
+            <li>Docker Hub</li>
+          </ul>
+        </div>
+
+        <div className="card">
+          <h2>Automatización</h2>
+          <p>
+            Cada commit genera automáticamente una nueva imagen en Docker Hub
+            con el tag <strong>latest</strong> y otro con el SHA del commit.
+          </p>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <p>Desarrollado para Arquitectura de Software II</p>
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;
