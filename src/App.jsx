@@ -34,6 +34,15 @@ function App() {
             con el tag <strong>latest</strong> y otro con el SHA del commit.
           </p>
         </div>
+
+        <div className="card">
+        <h2>📦 Versionado de Imágenes</h2>
+        <p>Cada ejecución del pipeline publica dos etiquetas: <strong>latest</strong> y el
+        <strong> SHA del commit</strong>. De esta forma, siempre existe una versión
+        reciente y también versiones históricas para comparar o regresar a una anterior.
+       </p>
+       </div>
+
       </section>
 
       <footer className="footer">
