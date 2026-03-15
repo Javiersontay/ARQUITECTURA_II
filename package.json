@@ -11,6 +11,10 @@
     "lint": "turbo lint"
   },
   "devDependencies": {
+    "prisma": "^7.5.0",
     "turbo": "^2.5.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.5.0"
   }
 }
