@@ -1,0 +1,12 @@
+service:
+  type: LoadBalancer
+
+providers:
+  kubernetesCRD:
+    enabled: true
+  kubernetesIngress:
+    enabled: true
+
+logs:
+  general:
+    level: INFO
