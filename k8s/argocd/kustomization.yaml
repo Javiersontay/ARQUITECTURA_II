@@ -1,0 +1,10 @@
+namespace: argocd
+
+resources:
+  - install.yaml
+
+patches:
+  - path: argocd-cmd-params-patch.yaml
+    target:
+      kind: ConfigMap
+      name: argocd-cmd-params-cm
