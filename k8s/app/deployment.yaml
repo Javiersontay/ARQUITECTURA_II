@@ -18,4 +18,4 @@ spec:
           image: semana4-app:1.0.0
           imagePullPolicy: Never
           ports:
-            - containerPort: 3000
+            - containerPort: 80
