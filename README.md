@@ -14,13 +14,15 @@ http://app.javier-sontay.com
 
 ## ArgoCD running with local DNS
 
-ArgoCD was configured and accessed using the required domain format:
+ArgoCD was configured and accessed using the required local DNS domain:
 
 ```text
 http://argo.javier-sontay.com
 ```
 
-<img width="1304" height="700" alt="ArgoCD running with local DNS" src="https://github.com/user-attachments/assets/841e8423-1131-47f4-9ded-13e41dd4bf0c" />
+The applications are managed by ArgoCD and show the `Synced` and `Healthy` status.
+
+<img width="1308" height="694" alt="ArgoCD applications synced and healthy" src="https://github.com/user-attachments/assets/04dbed69-682d-43d4-a656-fcd4bf7ebae6" />
 
 ---
 
